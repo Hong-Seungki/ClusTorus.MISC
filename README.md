@@ -1,8 +1,8 @@
 # ClusTorus.MISC
-miscellaneous materials for R package ClusTorus
+miscellaneous materials for R package "ClusTorus"
 
 
-If you want to install or get some details of R package ClusTorus, please visit the following repository:
+If you want to install or get some details of R package "ClusTorus", please visit the following repository:
 https://github.com/sungkyujung/ClusTorus (Vignettes and package manual will be generated soon.)
 
 
