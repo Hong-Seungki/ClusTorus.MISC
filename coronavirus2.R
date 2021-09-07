@@ -129,7 +129,7 @@ ggsave(paste(filename,"11figure_clust.png",sep = ""), width = 8, height = 4*8/6)
 
 
 # Find alpha and J --------------------------------------------------------
-
+set.seed(2021)
 Jvec <- 3:65
 l <- list()
 set.seed(0)
@@ -137,8 +137,8 @@ n <- nrow(data)
 n2 <- sum(split.id == 2)
  for (j in Jvec){
    l[[j]] <- icp.torus.score(data, split.id = split.id,
-                             method = "mixture",
-                             mixturefitmethod = "a",
+                             method = "kmeans",
+                             kmeansfitmethod = "g",
                              param = list(J = j))
  }
 alphavec <- 1:floor(n2/2) / n2
@@ -150,7 +150,7 @@ N <- length(alphavec)
    Mvec <- alphavec
    a<-icp.torus.eval(l[[j]], level = alphavec, eval.point = grid.torus())
    for (i in 1:N){
-     Mvec[i] <- sum(a$Chat_e[,i])/10000
+     Mvec[i] <- sum(a$Chat_kmeans[,i])/10000
    }
    out <- rbind(out, data.frame(alpha = alphavec, J = j, mu = Mvec, criterion = alphavec + Mvec))
  } 
@@ -185,12 +185,12 @@ ggsave(paste(filename,"8mixture_fit2.png",sep = ""), width = 6, height = 4)
 
 
 ia <- icp.torus.eval(icp.torus, level = alphahat, eval.point = grid.torus())
-b <- data.frame(ia$phi,ia$psi, ia$Chat_mix == 1, ia$Chat_max == 1, ia$Chat_e == 1)
-colnames(b) <- c("phi","psi","C_mix","C_max","C_e")
+b <- data.frame(ia$eval.point, ia$Chat_kmeans == 1)
+colnames(b) <- c("phi","psi","Chat_kmeans")
 head(b)
 
-b<- b %>%  pivot_longer(3:5, names_to = "Type", values_to = "value")
-g0 <- ggplot() + geom_contour(aes(phi, psi, z = ifelse(value,1,0),linetype = Type, color =Type), data = b, size = 1,lineend = "round" ) + 
+b<- b %>%  pivot_longer(3, names_to = "Type", values_to = "value")
+g0 <- ggplot() + geom_contour(aes(phi, psi, z = ifelse(value,1,0)), data = b, size = 1,lineend = "round" ) + 
   geom_point(mapping = aes(x,y), data = data.frame(x = data[,1],y =data[,2])) + 
   scale_x_continuous(breaks = c(0,1,2,3,4)*pi/2, labels = c("0","pi/2","pi","3pi/2","2pi"), limits = c(0,2*pi))+ 
   scale_y_continuous(breaks = c(0,1,2,3,4)*pi/2, labels = c("0","pi/2","pi","3pi/2","2pi"), limits = c(0,2*pi))

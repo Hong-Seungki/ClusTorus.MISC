@@ -4,8 +4,7 @@ library(tidyverse)
 library(ClusterR)
 library(mclust)
 library(cowplot)
-devtools::load_all()
-# library(ClusTorus)
+library(ClusTorus)
 # source('routines.R')
 
 set.seed(20201)
@@ -365,6 +364,11 @@ plot_grid(
   dat1.results.ge$gout ,
   dat2.results.ge$gout ,
   label_size = 12, nrow = 4, ncol = 2)
+
+plot_grid(
+  dat1.results.ge$gout ,
+  dat2.results.ge$gout ,
+  label_size = 12, ncol = 2)
 
 ggsave("./examples/Toy_Data2.png", width = 12, height = 16)
 
